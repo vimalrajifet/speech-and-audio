@@ -1,0 +1,712 @@
+=== Project61.pdf (Pages: 3) ===
+--- Page 1 ---
+Project 61: Speech-to-Text Converter
+Goal: Build a tool that takes audio input (live or ﬁle) and converts it into accurate, readable
+text.
+Methods
+Live Microphone Input: Using speech_recognition
+Audio File Transcription: Using Whisper or SpeechRecognition
+Output: Transcribed text saved to ﬁle or printed
+Step-by-Step Implementation
+Step 1: Install Required Libraries
+pip install openai-whisper speechrecognition pydub
+pydub is needed to handle .mp3 or convert formats.
+Option A: Live Mic Transcription (Simple Setup)
+import speech_recognition as sr
+# Initialize recognizer
+r = sr.Recognizer()
+def mic_to_text():
+    with sr.Microphone() as source:
+--- Page 2 ---
+        print(" 🎤  Speak now...")
+        audio = r.listen(source)
+    try:
+        text = r.recognize_google(audio)
+        print(" 📝  Transcribed Text:\n", text)
+    except sr.UnknownValueError:
+        print(" ⚠  Could not understand the audio.")
+    except sr.RequestError as e:
+        print(" ⚠  Request failed; {0}".format(e))
+Call it with:
+mic_to_text()
+Option B: Audio File Transcription with Whisper
+import whisper
+# Load Whisper model
+model = whisper.load_model("base")  # or use "small", "medium", "large"
+def file_to_text(audio_path):
+    print(" 🔍  Transcribing", audio_path)
+    result = model.transcribe(audio_path)
+    print(" 📝  Transcribed Text:\n", result["text"])
+    return result["text"]
+Call it with:
+file_to_text("audio_sample.mp3")
+--- Page 3 ---
+Step 3: Save Transcription to a File
+def save_transcription(text, output_file="transcript.txt"):
+    with open(output_file, "w") as f:
+        f.write(text)
+    print(f" ✅  Saved transcription to {output_file}")
+Key Concepts
+speech_recognition: Works with online Google API (lightweight)
+whisper: More accurate, multilingual, works oﬄine
+pydub/ﬀmpeg: Needed for audio conversion if using MP3s
+Project Summary
+Input: Microphone or audio ﬁle (MP3, WAV)
+Model: Google STT or OpenAI Whisper
+Output: Transcribed text (terminal or saved)
+Use Case: Podcasts, lectures, meetings, accessibility tools
+
+==================================================
+
+=== Project62.pdf (Pages: 4) ===
+--- Page 1 ---
+Project 62: Text-to-Speech with ElevenLabs or Coqui
+Goal: Turn any input text into audio speech output, with support for voice selection, saving
+to ﬁle, and real-time playback.
+Two Implementation Options
+Platform
+Pros
+Cons
+ElevenLabs
+Ultra-realistic voices, easy API
+Requires API key, cloud
+Coqui TTS
+Oﬄine, open-source, customizable
+Heavier install
+OPTION 1: ElevenLabs TTS (Cloud-Based)
+Step 1: Install & Set API Key
+pip install elevenlabs
+--- Page 2 ---
+from elevenlabs import generate, play, save, set_api_key
+set_api_key("your-elevenlabs-api-key")
+Step 2: Convert Text to Speech
+text = "Welcome to the AI Text-to-Speech demo using ElevenLabs!"
+audio = generate(text=text, voice="Rachel", model="eleven_monolingual_v1")
+# Playback
+play(audio)
+# Save to file
+save(audio, "output_elevenlabs.wav")
+ElevenLabs Summary
+Input: Text
+Voice: Predeﬁned (e.g., Rachel, Adam, custom)
+Output: WAV ﬁle or live playback
+Use Case: Voiceovers, AI narration, content accessibility
+OPTION 2: Coqui TTS (Fully Oﬄine)
+Step 1: Install Coqui
+--- Page 3 ---
+pip install TTS
+Optionally download models: tts --list_models
+Step 2: Load and Use a Pretrained TTS Model
+from TTS.api import TTS
+# Load multilingual or English model
+tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=Fals
+# Synthesize speech and save
+tts.tts_to_file(text="Hello! This is an offline voice using Coqui TTS.", file_
+Coqui TTS Summary
+Oﬄine
+Many model options (Tacotron, FastSpeech, GlowTTS, etc.)
+Languages: English, German, Spanish, etc.
+Can be ﬁne-tuned with your own data
+Project Summary
+Feature
+ElevenLabs
+--- Page 4 ---
+Coqui TTS
+Online/Oﬄine
+Online (API)
+Oﬄine (local)
+Voices
+Hyper-realistic, cloned voices
+Basic to advanced TTS models
+Customization
+High (premium features)
+High (train your own)
+Ideal for
+Demos, apps, realistic speech
+Private, oﬄine, research use
+
+==================================================
+
+=== Project63.pdf (Pages: 3) ===
+--- Page 1 ---
+Project 63: Language Identiﬁcation from Audio
+Goal: Create a tool that:
+1. Accepts audio input (mic or ﬁle)
+2. Analyzes the speech pattern
+3. Returns the most probable spoken language (e.g., English, Spanish, Hindi, etc.)
+How It Works
+You’ll use models like:
+OpenAI Whisper (supports automatic language detection)
+pycld3 (Google’s Compact Language Detector for text)
+Optional: VoxLingua107, SpeechBrain, or FastText for advanced use
+🔧  Step-by-Step Implementation (Using Whisper)
+Step 1: Install Required Libraries
+pip install openai-whisper
+Step 2: Load the Model and Audio
+--- Page 2 ---
+import whisper
+# Load Whisper model
+model = whisper.load_model("base")  # or "small", "medium", etc.
+# Transcribe with language detection
+result = model.transcribe("sample_audio.mp3", task="transcribe", language=None
+# Detected language
+print(" 🌍  Detected Language:", result["language"])
+Whisper Result Sample
+🌍  Detected Language: es  # Spanish
+Whisper returns ISO 639-1 codes (e.g., en, fr, hi, zh).
+Step 3: Convert Language Code to Full Name
+import pycountry
+def get_language_name(lang_code):
+    try:
+        return pycountry.languages.get(alpha_2=lang_code).name
+    except:
+        return lang_code
+lang_name = get_language_name(result["language"])
+print(" ✅  Language Name:", lang_name)
+Optional: Use Whisper Just for Detection (No Transcription)
+--- Page 3 ---
+audio = whisper.load_audio("sample_audio.mp3")
+audio = whisper.pad_or_trim(audio)
+mel = whisper.log_mel_spectrogram(audio).to(model.device)
+_, probs = model.detect_language(mel)
+detected_lang = max(probs, key=probs.get)
+print(" 📢  Most Likely Language:", get_language_name(detected_lang))
+Project Summary
+Input: Audio ﬁle or mic input
+Output: Detected spoken language (ISO code + full name)
+Model: Whisper (supports multilingual speech recognition)
+Use Case: Auto-routing, localization, transcription prep
+
+==================================================
+
+=== Project64.pdf (Pages: 4) ===
+--- Page 1 ---
+Project 64: Sound Classiﬁcation (UrbanSound8K)
+Goal: Build a CNN or CNN-RNN model that classiﬁes 10 common environmental sounds
+from the UrbanSound8K dataset.
+🎧  UrbanSound8K Dataset Overview
+URL: https://urbansounddataset.weebly.com
+8,732 audio ﬁles labeled with:
+air_conditioner, car_horn, children_playing, dog_bark, drilling,
+engine_idling, gun_shot, jackhammer, siren, street_music
+Step-by-Step Implementation
+Step 1: Install Required Libraries
+pip install librosa pandas numpy matplotlib torch torchaudio scikit-learn
+Step 2: Extract Audio Features (MFCCs)
+import librosa
+import numpy as np
+def extract_mfcc(file_path, n_mfcc=40, max_pad_len=174):
+    audio, sr = librosa.load(file_path, res_type='kaiser_fast')
+    mfcc = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=n_mfcc)
+--- Page 2 ---
+    pad_width = max_pad_len - mfcc.shape[1]
+    if pad_width > 0:
+        mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)), mode='constant
+    else:
+        mfcc = mfcc[:, :max_pad_len]
+    return mfcc
+Step 3: Load Metadata and Prepare Dataset
+import pandas as pd
+import os
+metadata = pd.read_csv("UrbanSound8K/metadata/UrbanSound8K.csv")
+labels = metadata['class'].unique()
+label_to_index = {label: idx for idx, label in enumerate(labels)}
+features = []
+targets = []
+for index, row in metadata.iterrows():
+    file_path = f"UrbanSound8K/audio/fold{row['fold']}/{row['slice_file_name']
+    mfcc = extract_mfcc(file_path)
+    features.append(mfcc)
+    targets.append(label_to_index[row['class']])
+Step 4: Build and Train a CNN Model
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+X = torch.tensor(np.array(features)).unsqueeze(1).float()  # (N, 1, 40, 174)
+y = torch.tensor(np.array(targets))
+--- Page 3 ---
+train_ds = TensorDataset(X, y)
+train_loader = DataLoader(train_ds, batch_size=32, shuffle=True)
+class SoundCNN(nn.Module):
+    def __init__(self):
+        super(SoundCNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3)
+        self.pool = nn.MaxPool2d(2)
+        self.fc1 = nn.Linear(32 * 19 * 86, 128)
+        self.fc2 = nn.Linear(128, 10)
+    def forward(self, x):
+        x = self.pool(torch.relu(self.conv1(x)))
+        x = x.view(x.size(0), -1)
+        x = torch.relu(self.fc1(x))
+        return self.fc2(x)
+model = SoundCNN()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+criterion = nn.CrossEntropyLoss()
+Step 5: Train the Model
+for epoch in range(10):
+    model.train()
+    total_loss = 0
+    for xb, yb in train_loader:
+        optimizer.zero_grad()
+        out = model(xb)
+        loss = criterion(out, yb)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print(f"Epoch {epoch+1}, Loss: {total_loss:.4f}")
+--- Page 4 ---
+Step 6: Make Predictions
+def predict(file_path):
+    model.eval()
+    mfcc = extract_mfcc(file_path)
+    mfcc_tensor = torch.tensor(mfcc).unsqueeze(0).unsqueeze(0).float()
+    with torch.no_grad():
+        pred = model(mfcc_tensor)
+    predicted_index = torch.argmax(pred, dim=1).item()
+    return labels[predicted_index]
+print("Predicted class:", predict("UrbanSound8K/audio/fold1/100032-3-0-0.wav")
+Key Concepts
+MFCC: Captures audio features compactly
+CNN: Detects frequency-time patterns
+UrbanSound8K: Standard dataset for environmental sound recognition
+Project Summary
+Input: Audio clip (≤4 sec)
+Output: One of 10 environment-related classes
+Model: CNN trained on MFCC features
+Use Case: Smart cities, surveillance, accessibility, IoT sensors
+
+==================================================
+
+=== Project65.pdf (Pages: 3) ===
+--- Page 1 ---
+Project 65: Voice Cloning Mini Project
+Goal: Clone a speaker’s voice using a few seconds of audio and synthesize custom speech
+in that voice.
+Techniques Used
+Speaker Embedding: Extract speaker identity (from audio)
+Text-to-Speech: Generate speech from text using that voice
+Frameworks:
+🧪  Coqui TTS (open-source)
+🗣  Real-Time Voice Cloning (RTVC)
+[ 🎧  Resemble AI / ElevenLabs] (cloud, for realism)
+Step-by-Step with Coqui TTS (Oﬄine Approach)
+Step 1: Install Dependencies
+pip install TTS
+Step 2: Download a Pretrained Voice Cloning Model
+tts --list_models | grep speaker-embedding
+--- Page 2 ---
+Pick a multi-speaker model, like:
+tts --model_name tts_models/multilingual/multi-dataset/your_tts
+Step 3: Prepare Voice Sample
+Use a .wav ﬁle of someone speaking (≥ 3 seconds recommended)
+Make sure it’s mono, 16kHz, WAV format
+sample_path = "speaker_sample.wav"
+Step 4: Clone Voice from Sample
+from TTS.api import TTS
+# Load pretrained cloning model
+tts = TTS(model_name="tts_models/multilingual/multi-dataset/your_tts")
+# Extract speaker embedding
+speaker_wav = sample_path
+text = "Hello, this is your cloned voice speaking!"
+# Generate speech using the cloned voice
+tts.tts_to_file(text=text, speaker_wav=speaker_wav, file_path="cloned_voice.wa
+Output
+You’ll get a WAV ﬁle (cloned_voice.wav) that says your input text in the cloned
+voice!
+--- Page 3 ---
+Key Concepts
+Speaker Embedding: Captures vocal tone, pitch, and timbre
+Voice Transfer: Applies that voice style to arbitrary text
+Few-shot cloning: Works with as little as 3–5 seconds
+Project Summary
+Input: Short voice sample + target text
+Output: Synthesized audio mimicking the original speaker
+Framework: Coqui TTS (your_tts or vits + speaker embedding)
+Use Cases: Personalized AI, content creation, accessibility
+
+==================================================
+
+=== Project66.pdf (Pages: 3) ===
+--- Page 1 ---
+Project 66: Real-Time Audio Transcriber
+Goal: Capture audio from a microphone and transcribe it live using a speech-to-text engine
+like:
+🔹  OpenAI Whisper (local/oﬄine, accurate)
+🔹  Google SpeechRecognition (fast, easy)
+🔹  Vosk / DeepSpeech (oﬄine, lightweight)
+Tools You Can Use
+Engine
+Pros
+Cons
+Whisper
+Very accurate, oﬄine
+Slower, needs GPU for real-time
+SpeechRecognition + Google
+Fast, easy
+Requires Internet
+Vosk
+Fast, oﬄine
+Medium accuracy
+--- Page 2 ---
+Step-by-Step: Using speech_recognition (Simple Setup)
+Step 1: Install Required Packages
+pip install SpeechRecognition pyaudio
+If pyaudio fails, use:
+pip install pipwin
+pipwin install pyaudio
+Step 2: Create Real-Time Transcriber
+import speech_recognition as sr
+recognizer = sr.Recognizer()
+def live_transcribe():
+    with sr.Microphone() as source:
+        print(" 🎤  Listening... (say 'stop' to end)")
+        while True:
+            try:
+                audio = recognizer.listen(source)
+                text = recognizer.recognize_google(audio)
+                print(" 📝 ", text)
+                if "stop" in text.lower():
+                    print(" ⏹  Stopping transcription.")
+                    break
+            except sr.UnknownValueError:
+                print(" 🤷  Couldn't understand. Try again.")
+            except sr.RequestError as e:
+                print(" ⚠  API error:", e)
+--- Page 3 ---
+Run it:
+live_transcribe()
+Output
+Live stream of printed transcriptions, ending when you say “stop”.
+Whisper Alternative (Advanced + Accurate)
+Install:
+pip install openai-whisper sounddevice numpy
+Use Whisper + SoundDevice to stream audio and transcribe chunks every few seconds.
+Project Summary
+Input: Real-time audio via microphone
+Output: Live transcription printed or displayed
+Tool: speech_recognition or whisper
+Use Case: Live captions, meetings, classrooms, accessibility
+
+==================================================
+
+=== Project67.pdf (Pages: 4) ===
+--- Page 1 ---
+Project 67: Voice Emotion Classiﬁer
+Goal: Build a system that:
+1. Accepts audio input (WAV ﬁle or mic)
+2. Extracts features like MFCCs or spectral data
+3. Classiﬁes the speaker’s emotion
+4. Returns labels like: happy, angry, neutral, sad, etc.
+🧠  Popular Datasets
+RAVDESS: Ryerson Audio-Visual Dataset of Emotional Speech
+TESS: Toronto Emotional Speech Set
+CREMA-D: Crowd-sourced Emotional Multimodal Actors Dataset
+Step-by-Step Implementation (Using RAVDESS)
+Step 1: Install Required Libraries
+pip install librosa scikit-learn numpy torch matplotlib
+Step 2: Feature Extraction – MFCCs
+--- Page 2 ---
+import librosa
+import numpy as np
+def extract_features(file_path):
+    y, sr = librosa.load(file_path, duration=3, offset=0.5)
+    mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
+    mfcc_scaled = np.mean(mfcc.T, axis=0)
+    return mfcc_scaled
+Step 3: Load Data and Labels (RAVDESS Format)
+import os
+emotion_map = {
+    '01': 'neutral',
+    '02': 'calm',
+    '03': 'happy',
+    '04': 'sad',
+    '05': 'angry',
+    '06': 'fearful',
+    '07': 'disgust',
+    '08': 'surprised'
+}
+X, y = [], []
+for file in os.listdir("ravdess/"):
+    if file.endswith(".wav"):
+        emotion = emotion_map[file.split("-")[2]]
+        feature = extract_features(os.path.join("ravdess", file))
+        X.append(feature)
+        y.append(emotion)
+Step 4: Train Classiﬁer (e.g., Random Forest or Simple NN)
+--- Page 3 ---
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+clf = RandomForestClassifier()
+clf.fit(X_train, y_train)
+y_pred = clf.predict(X_test)
+print(classification_report(y_test, y_pred))
+Step 5: Predict Emotion for New Audio
+def predict_emotion(file_path):
+    feature = extract_features(file_path).reshape(1, -1)
+    return clf.predict(feature)[0]
+# Try it on a new WAV file
+print("Predicted emotion:", predict_emotion("test_speech.wav"))
+Key Concepts
+MFCCs: Capture the timbre and tone from audio—key to detecting emotions
+RandomForest or CNN can be used as classiﬁers
+Dataset ﬁlenames often encode emotion info (e.g., 03 = happy in RAVDESS)
+Project Summary
+--- Page 4 ---
+Input: Voice ﬁle (WAV)
+Output: Emotion label (happy, angry, neutral, etc.)
+Model: RandomForest trained on MFCCs (or use CNN/LSTM later)
+Use Case: Sentiment AI, wellness monitoring, aﬀective agents
+
+==================================================
+
+=== Project68.pdf (Pages: 5) ===
+--- Page 1 ---
+Project 68: Audio Keyword Spotting
+Goal: Create a model or tool that:
+1. Listens to short audio clips (or real-time input)
+2. Detects if a speciﬁc keyword is spoken
+3. Outputs the detected word or triggers an action
+Common Datasets
+Google Speech Commands (35+ words): Download
+Words include: yes, no, up, down, go, stop, etc.
+Step-by-Step Implementation Using Google Speech
+Commands + CNN
+Step 1: Install Required Libraries
+pip install torchaudio torch torchvision matplotlib
+Step 2: Load Dataset and Preprocess
+import torchaudio
+from torchaudio.datasets import SPEECHCOMMANDS
+import os
+--- Page 2 ---
+class SubsetSC(SPEECHCOMMANDS):
+    def __init__(self, subset):
+        super().__init__("./", download=True)
+        self._walker = [w for w in self._walker if subset in w]
+train_set = SubsetSC("training")
+test_set = SubsetSC("testing")
+Step 3: Create Spectrogram Input
+import torch
+from torchaudio.transforms import MelSpectrogram
+transform = MelSpectrogram(sample_rate=16000, n_mels=64)
+def preprocess(waveform):
+    return transform(waveform).squeeze(0)
+Step 4: Deﬁne a CNN for Classiﬁcation
+import torch.nn as nn
+class KeywordCNN(nn.Module):
+    def __init__(self, num_classes):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(1, 8, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(2),
+            nn.Conv2d(8, 16, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool2d(2)
+        )
+        self.fc = nn.Sequential(
+--- Page 3 ---
+            nn.Linear(16 * 15 * 15, 128),
+            nn.ReLU(),
+            nn.Linear(128, num_classes)
+        )
+    def forward(self, x):
+        x = self.conv(x.unsqueeze(1))
+        x = x.view(x.size(0), -1)
+        return self.fc(x)
+Step 5: Train the Model
+# Prepare DataLoader (example using small set)
+labels = sorted(list(set(dat[2] for dat in train_set)))
+label_to_index = {label: i for i, label in enumerate(labels)}
+def collate_fn(batch):
+    xs, ys = [], []
+    for waveform, _, label, *_ in batch:
+        xs.append(preprocess(waveform))
+        ys.append(label_to_index[label])
+    return torch.stack(xs), torch.tensor(ys)
+from torch.utils.data import DataLoader
+train_loader = DataLoader(train_set, batch_size=32, collate_fn=collate_fn)
+test_loader = DataLoader(test_set, batch_size=32, collate_fn=collate_fn)
+model = KeywordCNN(num_classes=len(labels))
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+loss_fn = nn.CrossEntropyLoss()
+for epoch in range(5):
+    model.train()
+    for xb, yb in train_loader:
+        preds = model(xb)
+        loss = loss_fn(preds, yb)
+        optimizer.zero_grad()
+        loss.backward()
+--- Page 4 ---
+        optimizer.step()
+    print(f"Epoch {epoch+1} done.")
+Step 6: Predict Keywords
+def predict_keyword(wav_path):
+    waveform, sr = torchaudio.load(wav_path)
+    mel = preprocess(waveform)
+    pred = model(mel.unsqueeze(0))
+    predicted_label = labels[torch.argmax(pred)]
+    return predicted_label
+print(predict_keyword("yes.wav"))
+Key Concepts
+Keyword Spotting: Classiﬁes audio clips into pre-deﬁned keywords
+Spectrograms: Visual audio representations for CNNs
+Trigger word detection: Foundation of wake-word systems
+Project Summary
+Input: Short audio clip (1 sec)
+Output: Detected keyword
+Model: CNN trained on Mel-spectrograms
+--- Page 5 ---
+Use Case: Voice commands, wake words, interaction cues
+
+==================================================
+
+=== Project69.pdf (Pages: 4) ===
+--- Page 1 ---
+Project 69: Whisper + RAG Agent
+Goal: Build an AI agent that:
+1. Listens to your voice input using Whisper
+2. Transcribes it into a question
+3. Searches a document/vector database
+4. Generates an informed answer using an LLM
+Key Components
+Component
+Tool
+Speech-to-Text
+OpenAI Whisper or faster-whisper
+Retriever
+ChromaDB, FAISS, or Haystack
+Embedder
+SentenceTransformers or OpenAI
+LLM Generator
+transformers, GPT, or Mistral
+🔧  Step-by-Step Implementation
+--- Page 2 ---
+Step 1: Install Required Libraries
+pip install openai-whisper chromadb sentence-transformers transformers
+Step 2: Load Whisper and Transcribe Audio
+import whisper
+model = whisper.load_model("base")  # Or "small", "medium"
+result = model.transcribe("voice_query.wav")
+question = result["text"]
+print(" 🎤  Transcribed:", question)
+Step 3: Set Up a Simple Chroma Vector Store
+import chromadb
+from sentence_transformers import SentenceTransformer
+db = chromadb.Client()
+collection = db.create_collection("rag_memory")
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+# Sample documents
+docs = [
+    "Python is a programming language created by Guido van Rossum.",
+    "The capital of France is Paris.",
+    "Whisper is an ASR model developed by OpenAI."
+]
+for i, doc in enumerate(docs):
+    embedding = embedder.encode(doc).tolist()
+    collection.add(documents=[doc], embeddings=[embedding], ids=[f"doc_{i}"])
+--- Page 3 ---
+Step 4: Retrieve Relevant Context
+query_embedding = embedder.encode(question).tolist()
+result = collection.query(query_embeddings=[query_embedding], n_results=2)
+retrieved_docs = "\n".join(result["documents"][0])
+print(" 📚  Retrieved Context:\n", retrieved_docs)
+Step 5: Use LLM to Generate Final Answer
+from transformers import pipeline
+llm = pipeline("text-generation", model="tiiuae/falcon-7b-instruct")
+def answer_with_context(context, question):
+    prompt = f"""You are a helpful assistant.
+Context:
+{context}
+Question: {question}
+Answer:"""
+    response = llm(prompt, max_new_tokens=100)[0]['generated_text']
+    return response
+print(" 🧠  Answer:\n", answer_with_context(retrieved_docs, question))
+How It Works
+Whisper transcribes spoken queries
+--- Page 4 ---
+ChromaDB + embeddings retrieve relevant facts
+LLM answers using retrieved knowledge → a full RAG pipeline
+Project Summary
+Input: Voice question (.wav)
+Output: Generated, context-aware answer
+Components: Whisper + Embedding Retriever + LLM Generator
+Use Case: Voice Q&A, hands-free research assistant, voice-controlled chatbot
+
+==================================================
+
+=== Project70.pdf (Pages: 4) ===
+--- Page 1 ---
+Project 70: AI Podcast Summarizer
+Goal: Build a pipeline that:
+1. Transcribes a podcast using Whisper
+2. Chunks and embeds the transcript
+3. Summarizes key sections using a local or cloud LLM
+4. Outputs a clean summary or episode notes
+Components
+Step
+Tool/Model
+Audio to Text
+OpenAI Whisper (base or large)
+Chunking
+Text split by tokens or timestamps
+Summarizer Agent
+Transformers (T5, Falcon, GPT)
+Optional Memory
+ChromaDB, FAISS, or LangChain-style cache
+Step-by-Step Implementation
+--- Page 2 ---
+Step 1: Install Dependencies
+pip install openai-whisper nltk transformers
+Step 2: Transcribe the Podcast
+import whisper
+# Load Whisper and transcribe
+model = whisper.load_model("base")  # Or "medium"/"large" for better accuracy
+result = model.transcribe("podcast_episode.mp3")
+transcript = result["text"]
+print(" 🎧  Transcription complete.")
+Step 3: Chunk the Transcript for Long-Form Input
+import nltk
+nltk.download('punkt')
+from nltk.tokenize import sent_tokenize
+def chunk_text(text, max_words=200):
+    sentences = sent_tokenize(text)
+    chunks = []
+    current = ""
+    for sent in sentences:
+        if len(current.split()) + len(sent.split()) < max_words:
+            current += " " + sent
+        else:
+            chunks.append(current.strip())
+            current = sent
+    chunks.append(current.strip())
+--- Page 3 ---
+    return chunks
+chunks = chunk_text(transcript)
+Step 4: Summarize Each Chunk Using an LLM
+from transformers import pipeline
+summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
+summaries = []
+for i, chunk in enumerate(chunks):
+    print(f" 🔍  Summarizing chunk {i+1}/{len(chunks)}...")
+    summary = summarizer(chunk, max_length=100, min_length=30, do_sample=False
+    summaries.append(summary)
+Step 5: Combine Summaries into a Final Report
+final_summary = "\n\n".join(summaries)
+print("\n 📝  Final Podcast Summary:\n")
+print(final_summary)
+Key Concepts
+Chunking avoids hitting token limits in LLMs
+Summarization models condense each section
+Combines ASR (Whisper) + NLP summarization = complete pipeline
+--- Page 4 ---
+Project Summary
+Input: Long audio podcast (.mp3, .wav)
+Process: Transcribe → Chunk → Summarize
+Output: Concise summary or newsletter content
+Use Case: Podcast producers, note-taking, show notes, accessibility
+
+==================================================
+

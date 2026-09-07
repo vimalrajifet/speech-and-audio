@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Unified Speech & Audio Intelligence Suite</title>
+    <!-- Google Fonts: Playfair Display for Luxury Elegance & Plus Jakarta Sans for Modern Precision -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Ambient Sandalwood Glow Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <div class="app-container">
+        <!-- Luxury Top Navigation Bar -->
+        <header class="master-header">
+            <div class="header-brand">
+                <div class="brand-crest">
+                    <i class="fa-solid fa-wave-square"></i>
+                </div>
+                <div class="brand-titles">
+                    <span class="brand-edition">PREMIUM AI ACOUSTIC RESEARCH</span>
+                    <h1 class="brand-name">AURA <span>SPEECH SUITE</span></h1>
+                </div>
+            </div>
+        </header>
+
+        <!-- Project Navigation Hub (10 Projects Grid) -->
+        <nav class="project-hub-section" aria-label="Speech Projects Navigation">
+            <div class="section-title-wrap">
+                <span class="section-kicker">ACOUSTIC PORTFOLIO</span>
+                <h2 class="section-title">Select Intelligence Engine</h2>
+            </div>
+            
+            <div class="project-tabs-grid" id="projectTabsGrid">
+                <!-- Dynamically populated by app.js or hardcoded for high performance -->
+                <button class="project-card-tab active" data-id="61">
+                    <div class="tab-badge">01</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-microphone-lines"></i></div>
+                    <div class="tab-info">
+                        <h3>Speech-to-Text</h3>
+                        <p>Whisper ASR</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="62">
+                    <div class="tab-badge">02</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-volume-high"></i></div>
+                    <div class="tab-info">
+                        <h3>Neural TTS</h3>
+                        <p>Speech Synthesis</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="63">
+                    <div class="tab-badge">03</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-earth-americas"></i></div>
+                    <div class="tab-info">
+                        <h3>Language ID</h3>
+                        <p>Whisper Language</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="64">
+                    <div class="tab-badge">04</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-city"></i></div>
+                    <div class="tab-info">
+                        <h3>UrbanSound8K</h3>
+                        <p>PyTorch Sound CNN</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="65">
+                    <div class="tab-badge">05</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-dna"></i></div>
+                    <div class="tab-info">
+                        <h3>Voice Cloning</h3>
+                        <p>Timbre Transfer</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="66">
+                    <div class="tab-badge">06</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-bolt-lightning"></i></div>
+                    <div class="tab-info">
+                        <h3>Live Streaming</h3>
+                        <p>Real-Time STT</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="67">
+                    <div class="tab-badge">07</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-masks-theater"></i></div>
+                    <div class="tab-info">
+                        <h3>Emotion Classifier</h3>
+                        <p>RAVDESS Affect</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="68">
+                    <div class="tab-badge">08</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="tab-info">
+                        <h3>Keyword Spotting</h3>
+                        <p>Smart Automation</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="69">
+                    <div class="tab-badge">09</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="tab-info">
+                        <h3>Speech Summarizer</h3>
+                        <p>Meeting Briefing</p>
+                    </div>
+                </button>
+
+                <button class="project-card-tab" data-id="70">
+                    <div class="tab-badge">10</div>
+                    <div class="tab-icon-wrap"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="tab-info">
+                        <h3>Event Detection</h3>
+                        <p>ESC-50 Security</p>
+                    </div>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Dynamic Active Workspace Container -->
+        <main class="active-workspace-card" id="activeWorkspace">
+            <!-- Header bar of active project -->
+            <div class="workspace-header">
+                <div class="active-title-group">
+                    <div class="active-icon-badge" id="activeIconBadge"><i class="fa-solid fa-microphone-lines"></i></div>
+                    <div>
+                        <div class="active-kicker" id="activeProjectCategory">Project 61 • Automatic Speech Recognition</div>
+                        <h2 class="active-project-title" id="activeProjectTitle">Speech-to-Text Transcription</h2>
+                        <p class="active-project-desc" id="activeProjectDesc">High-fidelity speech-to-text powered by OpenAI Whisper, supporting zero-latency processing without external binary dependencies.</p>
+                    </div>
+                </div>
+                <div class="engine-badge" id="activeModelBadge">OpenAI Whisper Base</div>
+            </div>
+
+            <!-- Global Unified Audio Input Strip (Microphone + File Upload + Pre-loaded Samples) -->
+            <section class="audio-input-bar">
+                <div class="input-mode-tabs">
+                    <button class="input-pill-btn active" id="pillSample"><i class="fa-solid fa-wand-magic-sparkles"></i> Curated Samples</button>
+                    <button class="input-pill-btn" id="pillUpload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Audio</button>
+                    <button class="input-pill-btn" id="pillRecord"><i class="fa-solid fa-microphone"></i> Live Record</button>
+                </div>
+
+                <!-- Input Sub-Panels -->
+                <div class="input-content-area">
+                    <!-- Sample Selector -->
+                    <div class="input-panel active" id="panelSample">
+                        <div class="sample-select-row">
+                            <label for="sampleDropdown"><i class="fa-solid fa-compact-disc"></i> Select Demo Audio:</label>
+                            <select id="sampleDropdown" class="luxury-select">
+                                <option value="">Loading acoustic samples...</option>
+                            </select>
+                            <button class="play-preview-btn" id="btnPreviewSample" title="Listen to sample"><i class="fa-solid fa-play"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- File Uploader -->
+                    <div class="input-panel" id="panelUpload">
+                        <div class="dropzone-area" id="dropzoneArea">
+                            <i class="fa-solid fa-file-audio drop-icon"></i>
+                            <p>Drag & Drop WAV/MP3 file here, or <span>browse local file</span></p>
+                            <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+                            <div class="selected-file-label" id="selectedFileLabel">No file selected</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Mic Recorder -->
+                    <div class="input-panel" id="panelRecord">
+                        <div class="recorder-controls">
+                            <button class="record-trigger-btn" id="btnRecordToggle">
+                                <i class="fa-solid fa-circle" id="recordIcon"></i>
+                                <span id="recordStatusText">Start Recording</span>
+                            </button>
+                            <div class="record-timer" id="recordTimer">00:00</div>
+                            <span class="record-note">Web Audio API • 16kHz Mono</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Audio Visualizer Canvas -->
+                <div class="waveform-container">
+                    <canvas id="waveformCanvas" width="800" height="60"></canvas>
+                    <div class="waveform-overlay">
+                        <audio id="masterAudioPlayer" controls style="display: none;"></audio>
+                        <div class="audio-feedback-badge" id="audioFeedbackBadge">Ready for acoustic input</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project-Specific Interactive Parameter Forms -->
+            <section class="project-params-section" id="projectParamsSection">
+                <!-- Dynamically injected specialized controls for TTS, Voice Cloning, etc. -->
+                <div id="dynamicProjectControls"></div>
+
+                <!-- Master Execution Button -->
+                <div class="action-submit-row">
+                    <button class="master-run-btn" id="btnExecuteProject">
+                        <span class="btn-spinner" id="btnSpinner" style="display: none;"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+                        <i class="fa-solid fa-sparkles" id="btnIcon"></i>
+                        <span id="btnRunText">Process Acoustic Signal</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Unified Result Presentation Deck -->
+            <section class="result-deck-section" id="resultDeckSection">
+                <div class="result-deck-header">
+                    <div class="deck-title-group">
+                        <i class="fa-solid fa-chart-simple sandalwood-accent"></i>
+                        <h3>Model Inference Output</h3>
+                    </div>
+                    <div class="deck-actions">
+                        <button class="secondary-btn" id="btnCopyResult"><i class="fa-regular fa-copy"></i> Copy JSON</button>
+                    </div>
+                </div>
+
+                <div class="result-content-wrap" id="resultContentWrap">
+                    <div class="empty-state-card">
+                        <i class="fa-solid fa-wave-pulse empty-icon"></i>
+                        <p>Select a sample or record speech above, then click <strong>Process Acoustic Signal</strong> to inspect neural results.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Luxury Footer -->
+        <footer class="master-footer">
+            <div class="footer-left">
+                <span>AURA SPEECH & AUDIO INTELLIGENCE</span> • White & Sandalwood Edition
+            </div>
+            <div class="footer-right">
+                <span>FastAPI • Whisper • PyTorch • Edge-TTS • Librosa</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
